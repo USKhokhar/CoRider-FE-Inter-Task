@@ -3,6 +3,7 @@ import ChatHeader from './ChatHeader'
 import { Box, Input, IconButton, Menu, MenuButton, MenuList, MenuItem, Portal, InputGroup, InputRightElement } from '@chakra-ui/react';
 import { AttachmentIcon } from '@chakra-ui/icons';
 import {AiOutlineSend, AiOutlineFileAdd, AiOutlineCamera, AiOutlineVideoCameraAdd} from "react-icons/ai"
+import MessageBox from './MessageBox';
 
 const MessageInput = () => {
   const [message, setMessage] = useState('');
@@ -28,7 +29,7 @@ const MessageInput = () => {
         size='md'
         margin={"auto"}
         position="fixed"
-        bottom={10}
+        bottom={5}
         left={0}
         right={0}
         zIndex={9999}
@@ -72,6 +73,37 @@ const ChatScreen = () => {
     />
 
     <MessageInput />
+
+    <section style={{
+      display: "grid",
+      gap: "1rem",
+      padding: "2rem 0 5rem 0",
+      overflowY: "auto",
+      height: "80vh",
+    }}>
+      <MessageBox isSent={true} />
+      <MessageBox isSent={false} />
+      <MessageBox isSent={true} />
+      <MessageBox isSent={false} />
+      <MessageBox isSent={true} />
+      <MessageBox isSent={false} />
+      <MessageBox isSent={true} />
+      <MessageBox isSent={false} />
+      <MessageBox isSent={true} />
+      <MessageBox isSent={false} />
+      <MessageBox isSent={true} />
+      <MessageBox isSent={true} />
+      <MessageBox isSent={false} />
+      <MessageBox isSent={true} />
+      <MessageBox isSent={false} />
+      <MessageBox isSent={true} />
+      <MessageBox isSent={false} />
+      <MessageBox isSent={true} />
+      <MessageBox isSent={false} />
+      <MessageBox isSent={true} />
+      <MessageBox isSent={false} />
+      <MessageBox isSent={true} />
+    </section>
   </main>
 }
 

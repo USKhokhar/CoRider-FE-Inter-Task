@@ -5,7 +5,7 @@ import { AiOutlineTeam } from "react-icons/ai"
 
 const ChatHeader = ({from_head, to_head, chatHeaderIcon}) => {
   return <article>
-    <Flex align="center" justify="space-between" px={2} gap={2}>
+    <Flex align="center" justify="space-between" p={2} gap={2}>
       <Flex align="center">
         <Image src={chatHeaderIcon} alt="Chat Header Icon" borderRadius="full" boxSize={12} mx={2} />
         <Box>

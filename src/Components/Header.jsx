@@ -3,7 +3,7 @@ import { ArrowBackIcon, EditIcon } from '@chakra-ui/icons';
 
 const Header = () => {
   return <header>
-    <Flex align="center" py={4} px={2}>
+    <Flex align="center" py={4} px={2} >
       <IconButton
         icon={<ArrowBackIcon boxSize={5} />}
         aria-label="Go Back"
