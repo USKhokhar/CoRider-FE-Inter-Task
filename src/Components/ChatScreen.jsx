@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ChatHeader from './ChatHeader'
-import { Box, Input, IconButton, Menu, MenuButton, MenuList, MenuItem, Portal, InputGroup, InputRightElement } from '@chakra-ui/react';
-import { AttachmentIcon } from '@chakra-ui/icons';
+import { Box, Input, IconButton, Menu, MenuButton, MenuList, MenuItem, Portal, InputGroup, InputRightElement, Button } from '@chakra-ui/react';
+import { AttachmentIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import {AiOutlineSend, AiOutlineFileAdd, AiOutlineCamera, AiOutlineVideoCameraAdd} from "react-icons/ai"
 import MessageBox from './MessageBox';
 
@@ -64,6 +64,16 @@ const MessageInput = () => {
 };
 
 const ChatScreen = () => {
+
+  const scrollRef = useRef(null)
+
+  // Scrolling to bottom when page loads
+  useEffect(() => {
+    if(scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
+  }, [])
+
   return <main>
     <ChatHeader 
     // props to be later changed dynamically
@@ -74,12 +84,14 @@ const ChatScreen = () => {
 
     <MessageInput />
 
-    <section style={{
-      display: "grid",
-      gap: "1rem",
-      padding: "2rem 0 5rem 0",
-      overflowY: "auto",
-      height: "80vh",
+    <section
+      ref={scrollRef}
+      style={{
+        display: "grid",
+        gap: "1rem",
+        padding: "2rem 0 3rem 0",
+        overflowY: "auto",
+        height: "75vh",
     }}>
       <MessageBox isSent={true} />
       <MessageBox isSent={false} />
@@ -104,6 +116,8 @@ const ChatScreen = () => {
       <MessageBox isSent={false} />
       <MessageBox isSent={true} />
     </section>
+
+    
   </main>
 }
 
