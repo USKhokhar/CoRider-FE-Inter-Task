@@ -89,7 +89,7 @@ const ChatScreen = () => {
       style={{
         display: "grid",
         gap: "1rem",
-        padding: "2rem 0 3rem 0",
+        padding: "2rem 0 5rem 0",
         overflowY: "auto",
         height: "75vh",
     }}>
