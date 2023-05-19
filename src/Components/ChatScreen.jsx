@@ -93,25 +93,26 @@ const ChatScreen = () => {
   const [ isLoading, setIsLoading ] = useState(false)
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true)
+  const fetchData = async () => {
+    setIsLoading(true);
 
-      try {
-        const response = await axios.get(baseApi+currentPage)
-        const data = response.data
+    try {
+      const response = await fetch(baseApi + currentPage);
+      const data = await response.json();
 
-        const sortedMessages = data.chats.sort((a, b) => new Date(a.time) - new Date(b.time));
+      const sortedMessages = data.chats.sort((a, b) => new Date(a.time) - new Date(b.time));
 
-        setMessages((prev) => [...prev, ...sortedMessages])
-      } catch (error) {
-        console.log(error)
-      }
-
-      setIsLoading(false)
+      setMessages(sortedMessages);
+    } catch (error) {
+      console.log(error);
     }
 
-    fetchData()
-  }, [currentPage])
+    setIsLoading(false);
+  };
+
+  fetchData();
+}, [currentPage]);
+
 
   // Scrolling to bottom when page loads
   useEffect(() => {
