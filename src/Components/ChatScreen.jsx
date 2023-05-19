@@ -1,9 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import ChatHeader from './ChatHeader'
-import { Box, Input, IconButton, Menu, MenuButton, MenuList, MenuItem, Portal, InputGroup, InputRightElement, Button } from '@chakra-ui/react';
-import { AttachmentIcon, ChevronDownIcon } from '@chakra-ui/icons';
+import { Box, Input, IconButton, Menu, MenuButton, MenuList, MenuItem, Portal, InputGroup, InputRightElement, Button, Spinner } from '@chakra-ui/react';
+import { AttachmentIcon } from '@chakra-ui/icons';
 import {AiOutlineSend, AiOutlineFileAdd, AiOutlineCamera, AiOutlineVideoCameraAdd} from "react-icons/ai"
-import MessageBox from './MessageBox';
+// import MessageBox from './MessageBox';
+import axios from 'axios';
+
+const MessageBox = lazy(() => import('./MessageBox'))
+
+const Loader = () => {
+  return <div style={{
+    display: "grid",
+    placeItems: "center",
+  }}>
+      <Spinner
+        thickness='4px'
+        speed='0.65s'
+        emptyColor='gray.200'
+        color='blue.500'
+        size='xl'
+      />
+  </div>
+}
 
 const MessageInput = () => {
   const [message, setMessage] = useState('');
@@ -37,12 +55,13 @@ const MessageInput = () => {
         alignItems="center"
         bg={"white"}
         boxShadow={"2xl"}
+        borderRadius={8}
     >
       <Input
         value={message}
         onChange={handleChange}
         placeholder="Reply to @Rohit Raj"
-        borderRadius="md"
+        borderRadius={8}
         mr={2}
         border={"none"}
         outline={"none"}
@@ -65,7 +84,34 @@ const MessageInput = () => {
 
 const ChatScreen = () => {
 
+  const baseApi = 'http://3.111.128.67/assignment/chat?page='
+
   const scrollRef = useRef(null)
+
+  const [messages, setMessages] = useState([]);
+  const [ currentPage, setCurrentPage ] = useState(0)
+  const [ isLoading, setIsLoading ] = useState(false)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true)
+
+      try {
+        const response = await axios.get(baseApi+currentPage)
+        const data = response.data
+
+        const sortedMessages = data.chats.sort((a, b) => new Date(a.time) - new Date(b.time));
+
+        setMessages((prev) => [...prev, ...sortedMessages])
+      } catch (error) {
+        console.log(error)
+      }
+
+      setIsLoading(false)
+    }
+
+    fetchData()
+  }, [currentPage])
 
   // Scrolling to bottom when page loads
   useEffect(() => {
@@ -73,6 +119,7 @@ const ChatScreen = () => {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
   }, [])
+
 
   return <main>
     <ChatHeader 
@@ -93,28 +140,18 @@ const ChatScreen = () => {
         overflowY: "auto",
         height: "75vh",
     }}>
-      <MessageBox isSent={true} />
-      <MessageBox isSent={false} />
-      <MessageBox isSent={true} />
-      <MessageBox isSent={false} />
-      <MessageBox isSent={true} />
-      <MessageBox isSent={false} />
-      <MessageBox isSent={true} />
-      <MessageBox isSent={false} />
-      <MessageBox isSent={true} />
-      <MessageBox isSent={false} />
-      <MessageBox isSent={true} />
-      <MessageBox isSent={true} />
-      <MessageBox isSent={false} />
-      <MessageBox isSent={true} />
-      <MessageBox isSent={false} />
-      <MessageBox isSent={true} />
-      <MessageBox isSent={false} />
-      <MessageBox isSent={true} />
-      <MessageBox isSent={false} />
-      <MessageBox isSent={true} />
-      <MessageBox isSent={false} />
-      <MessageBox isSent={true} />
+      <Suspense fallback={<Loader />}>
+        {messages.map((message, index) => (
+            <MessageBox
+              key={message.id}
+              isSent={message.sender.self}
+              messageContent={message.message}
+              senderAvatar={message.sender.image}
+            />
+          ))
+        }
+        
+      </Suspense>
     </section>
 
     
