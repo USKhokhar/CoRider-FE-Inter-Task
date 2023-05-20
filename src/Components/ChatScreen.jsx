@@ -91,6 +91,16 @@ const ChatScreen = () => {
   const [ currentPage, setCurrentPage ] = useState(0)
   const [ isLoading, setIsLoading ] = useState(false)
 
+  
+  // Scrolling to bottom when page loads
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [])
+
+
   const handleScroll = async () => {
     if (scrollRef.current.scrollTop === 0 && !isLoading) {
       setIsLoading(true);
@@ -128,6 +138,11 @@ const ChatScreen = () => {
           ...prevMessages,
           ...sortedMessages,
         ]);
+
+         // Scroll to the bottom after new messages are appended
+      if (scrollRef.current) {
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      }
     } catch (error) {
       console.log(error);
     }
@@ -138,14 +153,7 @@ const ChatScreen = () => {
   fetchData();
 }, [currentPage]);
 
-
-  // Scrolling to bottom when page loads
-
-  // useEffect(() => {
-  //   if(scrollRef.current) {
-  //     scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-  //   }
-  // }, [])
+  
 
   return <main>
     <ChatHeader 
