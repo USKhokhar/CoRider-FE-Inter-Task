@@ -87,10 +87,31 @@ const ChatScreen = () => {
   const baseApi = 'https://3.111.128.67/assignment/chat?page='
 
   const scrollRef = useRef(null)
-
   const [messages, setMessages] = useState([]);
   const [ currentPage, setCurrentPage ] = useState(0)
   const [ isLoading, setIsLoading ] = useState(false)
+
+  const handleScroll = async () => {
+    if (scrollRef.current.scrollTop === 0 && !isLoading) {
+      setIsLoading(true);
+      setCurrentPage((prevPage) => prevPage + 1);
+      console.log(currentPage)
+    }
+  };
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (scrollRef.current) {
+        scrollRef.current.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [handleScroll]);
+
+
 
   useEffect(() => {
   const fetchData = async () => {
@@ -102,7 +123,11 @@ const ChatScreen = () => {
 
       const sortedMessages = data.chats.sort((a, b) => new Date(a.time) - new Date(b.time));
 
-      setMessages(sortedMessages);
+      
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          ...sortedMessages,
+        ]);
     } catch (error) {
       console.log(error);
     }
@@ -115,12 +140,12 @@ const ChatScreen = () => {
 
 
   // Scrolling to bottom when page loads
-  useEffect(() => {
-    if(scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
-  }, [])
 
+  // useEffect(() => {
+  //   if(scrollRef.current) {
+  //     scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+  //   }
+  // }, [])
 
   return <main>
     <ChatHeader 
@@ -141,6 +166,19 @@ const ChatScreen = () => {
         overflowY: "auto",
         height: "75vh",
     }}>
+      {
+        isLoading && <Spinner
+        // thickness='4px'
+        // display={'flex'}
+        // justifyContent={"center"}
+        // padding={"1.5"}
+        style={{margin: "auto"}}
+        speed='0.8s'
+        emptyColor='gray.200'
+        color='gray.800'
+        size='lg'
+      />
+      }
       <Suspense fallback={<Loader />}>
         {messages.map((message, index) => (
             <MessageBox
