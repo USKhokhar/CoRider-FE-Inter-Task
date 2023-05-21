@@ -9,9 +9,9 @@ export default defineConfig({
     VitePWA({
       injectRegister: 'auto',
       registerType: 'autoUpdate',
-      // devOptions: {
-      //   enabled: false
-      // },
+      devOptions: {
+        enabled: true
+      },
       manifest: {
         name: 'CHAT PWA -- CoRider',
         short_name: 'Chat PWA',

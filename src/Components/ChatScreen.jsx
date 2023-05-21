@@ -84,7 +84,7 @@ const MessageInput = () => {
 
 const ChatScreen = () => {
 
-  const baseApi = 'https://3.111.128.67/assignment/chat?page='
+  const baseApi = 'http://3.111.128.67/assignment/chat?page='
 
   const scrollRef = useRef(null)
   const [messages, setMessages] = useState([]);
